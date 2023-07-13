@@ -1,30 +1,36 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import styles from './Modal.module.css';
 
 const Modal = ({ imageURL, onCloseModal }) => {
+  const modalRef = useRef(null);
+
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.code === 'Escape') {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
         onCloseModal();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    const handleKeyDown = (event) => {
+      if (event.code === 'Escape') {
+        onCloseModal();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [onCloseModal]);
 
-  const handleCloseClick = useCallback(() => {
-    onCloseModal();
-  }, [onCloseModal]);
-
   return (
-    <div className="modal">
-      <div className="modal-content">
+    <div className={styles.Modal} onClick={onCloseModal}>
+      <div ref={modalRef} className={styles.Overlay}>
         <img src={imageURL} alt="" />
-        <button onClick={handleCloseClick}>Close</button>
       </div>
     </div>
   );
