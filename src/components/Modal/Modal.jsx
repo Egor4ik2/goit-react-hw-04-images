@@ -1,12 +1,10 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Modal.module.css';
 
 const Modal = ({ imageURL, onCloseModal }) => {
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.code === 'Escape') {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Escape') {
         onCloseModal();
       }
     };
@@ -16,18 +14,17 @@ const Modal = ({ imageURL, onCloseModal }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [onCloseModal]);
 
-  const handleBackdropClick = (event) => {
-    if (event.target === event.currentTarget) {
-      onCloseModal();
-    }
-  };
+  const handleCloseClick = useCallback(() => {
+    onCloseModal();
+  }, [onCloseModal]);
 
   return (
-    <div className={styles.Overlay} onClick={handleBackdropClick}>
-      <div className={styles.Modal}>
-        <img src={imageURL} alt="Modal" />
+    <div className="modal">
+      <div className="modal-content">
+        <img src={imageURL} alt="" />
+        <button onClick={handleCloseClick}>Close</button>
       </div>
     </div>
   );

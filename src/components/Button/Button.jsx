@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
-import styles from './Button.module.css';
+import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './Button.module.css';
 
 const Button = ({ onClick }) => {
-  const [visibleImages, setVisibleImages] = useState(12); 
-
-  const handleClick = () => {
-    setVisibleImages(prevVisibleImages => prevVisibleImages + 12); 
-    onClick(); 
-  };
-
   return (
-    <button type="button" className={styles.Button} onClick={handleClick}>
+    <button className={styles.Button} onClick={onClick}>
       Load More
     </button>
   );

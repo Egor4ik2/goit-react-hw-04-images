@@ -1,25 +1,10 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './ImageGalleryItem.module.css';
 
 const ImageGalleryItem = ({ webformatURL, largeImageURL, onImageClick }) => {
-  const [imageClassName, setImageClassName] = useState(
-    `${styles['ImageGalleryItem-image']} ImageGalleryItem-image`
-  );
-
-  const handleClick = () => {
-    onImageClick(largeImageURL);
-  };
-
   return (
-    <li className={styles.ImageGalleryItem}>
-      <img
-        src={webformatURL}
-        alt=""
-        className={imageClassName}
-        onClick={handleClick}
-      />
+    <li>
+      <img src={webformatURL} alt="" onClick={() => onImageClick(largeImageURL)} />
     </li>
   );
 };
