@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGal/ImageGallery';
 import Button from './Button/Button';
@@ -15,13 +15,7 @@ export const App = () => {
   const [selectedImageURL, setSelectedImageURL] = useState('');
   const [hasMoreImages, setHasMoreImages] = useState(true);
 
-  useEffect(() => {
-    if (searchQuery !== '') {
-      loadImages();
-    }
-  }, [searchQuery]);
-
-  const loadImages = () => {
+  const loadImages = useCallback(() => {
     setIsLoading(true);
 
     fetchImages(searchQuery, page) 
@@ -37,7 +31,13 @@ export const App = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }, [searchQuery, page]);
+
+  useEffect(() => {
+    if (searchQuery !== '') {
+      loadImages();
+    }
+  }, [searchQuery, loadImages]);
 
   const handleFormSubmit = (query) => {
     setSearchQuery(query);
@@ -50,9 +50,9 @@ export const App = () => {
     setSelectedImageURL(imageURL);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedImageURL('');
-  };
+  }, []);
 
   const handleLoadMore = () => {
     setPage(prevPage => prevPage + 1);
@@ -62,7 +62,7 @@ export const App = () => {
     if (page > 1) {
       loadImages();
     }
-  }, [page]);
+  }, [page, loadImages]);
 
   return (
     <div className={styles.App}>
@@ -81,4 +81,4 @@ export const App = () => {
       )}
     </div>
   );
-};
+}
