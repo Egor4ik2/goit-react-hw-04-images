@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Modal.module.css';
 
 const Modal = ({ imageURL, onCloseModal }) => {
+  const modalRef = useRef(null);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.code === 'Escape') {
@@ -18,14 +20,14 @@ const Modal = ({ imageURL, onCloseModal }) => {
   }, [onCloseModal]);
 
   const handleClick = (event) => {
-    if (event.target === event.currentTarget) {
+    if (event.target === modalRef.current) {
       onCloseModal();
     }
   };
 
   return (
     <div className={styles.Modal} onClick={handleClick}>
-      <div className={styles.Overlay}>
+      <div ref={modalRef} className={styles.Overlay}>
         <img src={imageURL} alt="" />
       </div>
     </div>
